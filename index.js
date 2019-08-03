@@ -36,7 +36,7 @@ exports.emailService = function(event, context, callback) {
         Data: "Password Reset Link"
       }
     },
-    Source: "jayc@csye6225-su19-chitaliaj.me" /* required */
+    Source: "csye6225@"+process.env.DOMAIN_NAME /* required */
   };
 ​
   let putParams = {
