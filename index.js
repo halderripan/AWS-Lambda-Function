@@ -3,7 +3,6 @@ var ddb = new aws.DynamoDB({ apiVersion: "2012-08-10" });
 var ses = new aws.SES();
 aws.config.update({ region: "us-east-1" });
 var docClient = new aws.DynamoDB.DocumentClient();
-​
 exports.emailService = function(event, context, callback) {
   let message = event.Records[0].Sns.Message;
   let messageJson = JSON.parse(message);
@@ -12,9 +11,8 @@ exports.emailService = function(event, context, callback) {
   console.log("Test Link: " + messageDataJson.link);
   console.log("Test Email: " + messageDataJson.Email);
   let currentTime = new Date().getTime();
-  let ttl = 60*1000;
+  let ttl = 15*60*1000;
   let expirationTime = (currentTime + ttl).toString();
-​
   var emailParams = {
     Destination: {
       /* required */
@@ -38,7 +36,6 @@ exports.emailService = function(event, context, callback) {
     },
     Source: "csye6225@"+process.env.DOMAIN_NAME /* required */
   };
-​
   let putParams = {
     TableName: "csye6225",
     Item: {
@@ -47,24 +44,20 @@ exports.emailService = function(event, context, callback) {
       ttl: { N: expirationTime }
     }
   };
-​
   let queryParams = {
     TableName: 'csye6225',
   Key: {
     'id': {S: messageDataJson.Email}
   },
   };
-​
   // first get item and check if email exists
   //if does not exist put item and send email,
   //if exists check if ttl > currentTime,
   // if ttl is greater than current time do nothing,
   // else send email
-​
   ddb.getItem(queryParams, (err, data) => {
     if(err) console.log(err)
     else{
-  
     // console.log('getItemttl: '+JSON.stringify(data, null, 2));
     console.log(data.Item)
     let jsonData = JSON.stringify(data)
@@ -112,5 +105,4 @@ exports.emailService = function(event, context, callback) {
       }
     }}
   });
-  
 };

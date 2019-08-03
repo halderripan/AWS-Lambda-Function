@@ -47,4 +47,4 @@ jobs:
       - run:
           name: Update lambdaFunction code
           command: |
-            aws lambda update-function-code --function-name test2-LambdaFunction-1GEIQI2WISLI0 --region us-east-1 --zip-file fileb://index.zip
+            aws lambda update-function-code --function-name EmailService --region us-east-1 --zip-file fileb://index.zip
