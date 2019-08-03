@@ -11,7 +11,7 @@ exports.emailService = function(event, context, callback) {
   console.log("Test Link: " + messageDataJson.link);
   console.log("Test Email: " + messageDataJson.Email);
   let currentTime = new Date().getTime();
-  let ttl = 60*1000;
+  let ttl = 15*60*1000;
   let expirationTime = (currentTime + ttl).toString();
   var emailParams = {
     Destination: {
